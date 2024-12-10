@@ -10,7 +10,7 @@ export  const redirectionURLFunction = () => {
     return (
         `https://www.tiktok.com/v2/auth/authorize?`
         +`client_key=${TIKTOK_KEY}`
-        +`&scope=user.info.basic`
+        +`&scope=user.info.basic,video.upload`
         +'&response_type=code'
         +`&redirect_uri=${TIKTOK_REDIRECT_URI}`
         +`&state=${Math.random().toString(36).substring(2)}`

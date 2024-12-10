@@ -27,11 +27,8 @@ await connectDB()
 
 app.get('/home', (req,res) => res.sendFile( path.resolve(__dirname, './index.html')))
 app.get('/video-upload', (req,res) => res.sendFile( path.resolve(__dirname, './video.html')))
-
-
-
 app.get('/get-code', (req,res) =>  res.redirect(redirectionURLFunction()))
-
+app.all('/verify',(req,res) => res.sendFile(path.resolve(__dirname,'./tiktok71RXrgbMYpBW9cBkzPVRctbejFuzjpTn.txt')))
 
 app.get('/callback',async function(req,res){
     try {
