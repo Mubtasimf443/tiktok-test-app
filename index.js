@@ -59,7 +59,7 @@ app.get('/callback',async function(req,res){
 })
 
 
-app.post('/video-upload', morgan('dev'),(req,res)=> {
+app.post('/video-upload', morgan('dev'),async(req,res)=> {
     log("video upload started")
     try {
         let DontSuffortMime = false;
@@ -75,7 +75,7 @@ app.post('/video-upload', morgan('dev'),(req,res)=> {
             },
             filename: () => (Date.now() +'.mp4')
         };
-        formidable(options).parse(req,async function(error ,fields,files){
+        await formidable(options).parse(req,async function(error ,fields,files){
             try {
                 if (error) {
                     log(error)
@@ -135,19 +135,61 @@ app.post('/video-upload', morgan('dev'),(req,res)=> {
                         })
                     }
                     else {
-                        return res.send('server error')
+                        return res.status(500).json({
+                            hasError:true
+                        })
                     }
                 } 
                 else {
-                    return res.send('server error')
+                    return res.status(500).json({
+                        hasError:true
+                    })
                 }
             }
         })
     } catch (error) {
-        
+        console.error(error);
     }
 })
 
+
+
+
+app.get('/test-video-upload', async(req,res)=> {
+    try {
+        res.send('yah , you have done it');
+        let settings=await Settings.findOne({});
+        if (!settings) throw 'server_video_upload_error: settings is null'
+        if (!settings.tiktok_access_token_status) throw 'server_video_upload_error: tiktok access token status is false'
+        let video_url=BASE_URL+'/video';
+        fetch('https://open.tiktokapis.com/v2/post/publish/inbox/video/init/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': ` Bearer ${settings.tiktok_access_token}`
+            },
+            body: JSON.stringify({
+                source_info: {
+                    source: 'PULL_FROM_URL',
+                    video_url
+                }
+            })
+        })
+        .then(response=> response.json())
+        .then(data=> {
+            console.log(data)
+        })
+        .catch(error => {
+            console.error(error)
+        })
+        .finally()
+    } catch (error) {
+        console.error(error)
+    } 
+})
+
+
+app.get('/video', (req,res) => res.sendFile(path.resolve(__dirname,'./a.mp4')));
 app.use('/temp', express.static(path.resolve(__dirname, './temp')))
 app.listen(3000, e => log("Thanks to Allah Subhanahu Oa Ta'ala, Server is working"));
 

@@ -8,15 +8,25 @@
     <main>
         <section>
             <button class="open">Authenticate</button>
+            <button class="test">Test Video upload</button>
         </section>
 
     </main>
     <script>
-        let btn=document.querySelector('.open');
+        let 
+        btn=document.querySelector('.open'),
+        test=document.querySelector('.test');
         btn.addEventListener('click',function(event){
             event.preventDefault();
             window.open(window.location.origin+ '/get-code')
         })
+        test.addEventListener('click', function(event){
+            event.preventDefault();
+            window.open()
+        })
+        
     </script>
+
+
 </body>
 </html>
