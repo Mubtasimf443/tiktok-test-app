@@ -1,9 +1,11 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Upload</title>
 </head>
+
 <body>
     <main>
         <section>
@@ -12,4 +14,31 @@
         </section>
     </main>
 </body>
+<script>
+    let btn = document.querySelector('.upload'),
+        input = document.querySelector('input');
+
+    btn.addEventListener('click', function (event) {
+        if (input.files.length === 0) return alert('their is no file')
+        if (input.files[0].type !== 'video/mp4') return alert('video is not mp4')
+        let form = new FormData();
+        form.append('video', input.files[0]);
+        form.append('title', 'Testing a video');
+        fetch(window.location.origin + '/video-upload', {
+            method: 'POST',
+            body: form
+        })
+        .then(Response => Response.json())
+        .then(function(Response) {
+            console.log(Response)
+        })
+        .catch(function(error) {
+            console.error(error)
+        })
+        .finally(
+            function(){}
+        )
+    })
+</script>
+
 </html>

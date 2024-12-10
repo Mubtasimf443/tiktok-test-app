@@ -15,6 +15,7 @@ import { BASE_URL, TIKTOK_KEY, TIKTOK_REDIRECT_URI, TIKTOK_SECRET } from './cont
 import { redirectionURLFunction } from './controllars/redirectionURLFunction.js';
 import { getAccessToken } from './controllars/getAccessToken.js';
 import formidable from 'formidable';
+import morgan from 'morgan'
 
 const app=express();
 const __dirname =path.dirname(fileURLToPath(import.meta.url));
@@ -58,11 +59,12 @@ app.get('/callback',async function(req,res){
 })
 
 
-app.post('/video-upload', (req,res)=> {
+app.post('/video-upload', morgan('dev'),(req,res)=> {
+    log("video upload started")
     try {
         let DontSuffortMime = false;
         let options = {
-            uploadDir: path.resolve(dirname,'./temp'),
+            uploadDir: path.resolve(__dirname,'./temp'),
             maxFiles: 1,
             allowEmptyFiles: false,
             maxFileSize: 250 * 1024 * 1024,
@@ -75,17 +77,26 @@ app.post('/video-upload', (req,res)=> {
         };
         formidable(options).parse(req,async function(error ,fields,files){
             try {
-                if (error) throw error
+                if (error) {
+                    log(error)
+                    throw error
+                }
                 if (DontSuffortMime) throw 'server_video_upload_error: mime type not supported'
                 if (!fields.title) throw 'server_video_upload_error: title not given'
                 if (!files.video) throw 'server_video_upload_error: video not given'
                 let 
                 title =fields.title[0],
                 video_name=files.video[0].newFilename;
+                log(fields)
+                log(files)
                 let video_url=BASE_URL+'/temp/'+video_name;
                 let settings=await Settings.findOne({});
                 if (!settings) throw 'server_video_upload_error: settings is null'
                 if (!settings.tiktok_access_token_status) throw 'server_video_upload_error: tiktok access token status is false'
+                return res.status(201).json({
+                    hasError:false,
+                    publish_id :'iwedkl83829'
+                })
                 let response=await fetch('https://open.tiktokapis.com/v2/post/publish/inbox/video/init/', {
                     method :'POST',
                     headers :{
