@@ -7,10 +7,16 @@
 <body>
     <main>
         <section>
-            <a href="/get-code">
-                Authenticate Your Self
-            </a>
+            <button class="open">Authenticate</button>
         </section>
+
     </main>
+    <script>
+        let btn=document.querySelector('.open');
+        btn.addEventListener('click',function(event){
+            event.preventDefault();
+            window.open(window.location.origin+ '/get-code')
+        })
+    </script>
 </body>
 </html>
