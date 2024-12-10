@@ -93,10 +93,7 @@ app.post('/video-upload', morgan('dev'),(req,res)=> {
                 let settings=await Settings.findOne({});
                 if (!settings) throw 'server_video_upload_error: settings is null'
                 if (!settings.tiktok_access_token_status) throw 'server_video_upload_error: tiktok access token status is false'
-                return res.status(201).json({
-                    hasError:false,
-                    publish_id :'iwedkl83829'
-                })
+              
                 let response=await fetch('https://open.tiktokapis.com/v2/post/publish/inbox/video/init/', {
                     method :'POST',
                     headers :{
