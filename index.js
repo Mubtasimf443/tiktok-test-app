@@ -22,6 +22,8 @@ import catchError, { namedErrorCatching } from './controllars/CatchError.js';
 const app=express();
 const __dirname =path.dirname(fileURLToPath(import.meta.url));
 
+
+await connectDB()
 let tiktok=new Tiktok({
     key :TIKTOK_KEY,
     secret:TIKTOK_SECRET,
@@ -57,6 +59,8 @@ app.get('/callback',async function (req,res){
         return catchError(res,error);
     }
 });
+
+
 app.get('/tiktok',async function (req,res) {
     try {
         let [status,access_token]=await settingsAsArray(["tiktok_access_token_status","tiktok_access_token"]);
@@ -68,7 +72,7 @@ app.get('/tiktok',async function (req,res) {
         console.error(error)
         return catchError(res,error);
     }
-})
+});
 
 app.listen(3000,()=>{
     log('server is running alhamdulellah')

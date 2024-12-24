@@ -10,7 +10,7 @@ export default class Tiktok {
         this.key=key;
         this.secret=secret;
         this.redirect_uri=redirect_uri;
-        this.scope=scope;
+        this.scope=scope || ['user.info.basic'] ;
     }
     getAuthUrl(){
         let 
@@ -62,7 +62,7 @@ export default class Tiktok {
                     refresh_token: response.data.refresh_token
                 }
             } else if (!(response.data.access_token && response.data.refresh_token)) {
-                throw response.data;
+                throw response;
             }
         }
         if (response.error) {
@@ -96,10 +96,8 @@ class Account {
             })
         });
         response = await response.json().catch(error => { return { error: { name: 'error in json parsing', massage: "can't parse json" } } });
-        if (response.error) throw response.error;
-        if (response.data) {
-            return response.data;
-        }
+        log(response);
+        return response;
            
     }
 }

@@ -10,7 +10,7 @@ import { DATABASE } from "./ENV.js";
 export const connectDB = async() => {
     try {
        await mongoose.connect(DATABASE);
-       console.log('db connect');
+       console.log('// db connect');
     } catch (error) {
         log(error)
     }  
